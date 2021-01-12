@@ -34,7 +34,6 @@ class Machine:
             if ch == ' ':
                 continue
             else:
-                print(self.get_current_setting())
                 idx_ch = self._alphabet.toInt(ch)
                 coded_idx_ch = self.convert_char(idx_ch)
                 coded_msg += self._alphabet.toChar(coded_idx_ch)
