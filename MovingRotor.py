@@ -7,11 +7,11 @@ class MovingRotor(Rotor):
         self._notches = notches
 
     @staticmethod
-    def rotates(self):
+    def rotates():
         return True
 
     def atNotch(self):
-        return self._iPos in self._notches
+        return self._cPos in self._notches
 
     def advance(self):
         if self._iPos == super().alphabet_size() - 1:
@@ -32,7 +32,7 @@ class MovingRotor(Rotor):
                 raise Exception("the character is not in the alphabet.")
             else:
                 self._cPos = input
-                self._iPos = super().int2char(str)
+                self._iPos = super().char2int(self._cPos)
 
     def convertForward(self, p):
         p += self._iPos
@@ -50,5 +50,7 @@ class MovingRotor(Rotor):
         preimage = super().warp(preimage)
         return preimage
 
+    def setting(self):
+        return self._iPos
 
 

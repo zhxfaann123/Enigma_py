@@ -21,7 +21,7 @@ def read_config(config_file: TextIOWrapper):
     """
     all_rotors = []
 
-    alphabet_string = config_file.readline()
+    alphabet_string = config_file.readline().rstrip()
     alphabet = Alphabet(alphabet_string)
 
     num_setting = config_file.readline().split()
@@ -37,11 +37,11 @@ def read_config(config_file: TextIOWrapper):
     return alphabet, num_rotors, num_pawls, all_rotors
 
 
-def read_rotor(rotor_str: str, alhpabet: Alphabet):
+def read_rotor(rotor_str: str, alphabet: Alphabet):
     list_str = rotor_str.split()
     name = list_str[0]
     type = list_str[1]
-    cycles = []
+    cycles = ""
     for i in range(2, len(list_str)):
         cycles += list_str[i]
     perm = Permutation(cycles, alphabet)
@@ -51,7 +51,7 @@ def read_rotor(rotor_str: str, alhpabet: Alphabet):
     elif type[0] == 'M':
         notches = ""
         for i in range(1, len(type)):
-            if type[i] in alhpabet.alphabetString:
+            if type[i] in alphabet.alphabetString:
                 notches += type[i]
             else:
                 raise Exception("The notch is not in the alphabet string!")
@@ -71,14 +71,18 @@ def process(machine: Machine, input_file: TextIOWrapper):
     while True:
         line = input_file.readline()
         line_list = line.split()
-        if not line_list:
+        if not line:
             return coded_message
+        elif line == '\n':
+            coded_message += '\n'
         elif line_list[0] == '*':
             machine.reset_rotors()
             machine.reset_plugboard()
-            rotor_name_list = line_list[1: num_rotor - 1]
+            rotor_name_list = line_list[1: num_rotor + 1]
             machine.insert_all_rotors(rotor_name_list)
-            machine.set_rotors(line_list[num_rotor])
+            machine.set_rotors(line_list[num_rotor + 1])
+
+            machine.set_plugboard(list2str(line_list[num_rotor + 2: len(line_list)]))
             config_flag = True
         else:
             if config_flag is False:
@@ -107,25 +111,23 @@ if __name__ == '__main__':
         raise Exception("The input argument must be 2 or 3!")
 
     alphabet, num_rotors, num_pawls, all_rotors = read_config(config_file)
-    machine = Machine(alphabet, num_rotors, num_pawls, all_rotors)
+    machine = Machine(alphabet, int(num_rotors), int(num_pawls), all_rotors)
     coded_message = process(machine, input_file)
 
-    while True:
-        count = 0
-        stop_flag = False
-        for i in range(len(coded_message)):
-            ch = coded_message[i]
-            if ch == '':
-                stop_flag = True
-                break
-            elif ch == '\n':
-                print('\n')
-            elif count != 5 or (count == 5 and coded_message[i] == '\n'):
-                print(ch)
-            else:
-                print(ch + ' ')
-        if stop_flag is True:
+    count = 1
+    for i in range(len(coded_message)):
+        ch = coded_message[i]
+        if ch == '':
             break
+        elif ch == '\n':
+            print('\n', end='')
+            count = 1
+        elif count % 5 != 0 or (count % 5 == 0 and coded_message[i + 1] == '\n'):
+            print(ch, end='')
+            count += 1
+        else:
+            print(ch + ' ', end='')
+            count = 1
 
     config_file.close()
     input_file.close()

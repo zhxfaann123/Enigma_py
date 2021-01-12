@@ -14,9 +14,11 @@ class Alphabet:
         return self.alphabetString.find(item) != -1
 
     def toChar(self, index):
+        assert 0 <= index < self.size()
         return self.alphabetString[index]
 
     def toInt(self, char):
+        assert char in self.alphabetString
         return self.alphabetString.find(char)
 
 

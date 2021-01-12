@@ -8,7 +8,7 @@ class Machine:
     """
     The Enigma Machine, consisting several rotors(Reflector/FixRotor/MovingRotor)
     """
-    def __init__(self, alphabet: Alphabet, num_rotors, num_pawls, rotors: list):
+    def __init__(self, alphabet: Alphabet, num_rotors: int, num_pawls: int, rotors: list):
         self._alphabet = alphabet
         self._num_rotors = num_rotors
         self._num_pawls = num_pawls
@@ -29,17 +29,21 @@ class Machine:
     def convert_str(self, msg: str):
         coded_msg = ""
         for ch in msg:
+            if ch == '\n':
+                return coded_msg
             if ch == ' ':
                 continue
             else:
+                print(self.get_current_setting())
                 idx_ch = self._alphabet.toInt(ch)
                 coded_idx_ch = self.convert_char(idx_ch)
                 coded_msg += self._alphabet.toChar(coded_idx_ch)
+        return coded_msg
 
     def check_rotor_configure(self):
         if not self._inserted_rotors:
             raise Exception("No rotor is inserted into the machine")
-        if not isinstance(self._inserted_rotors.index(0), Reflector):
+        if not isinstance(self._inserted_rotors[0], Reflector):
             raise Exception("The leftmost rotor isn't the reflector")
         for i in range(self._num_rotors - self._num_pawls):
             if self._inserted_rotors[i].rotates():
@@ -86,7 +90,7 @@ class Machine:
     def set_plugboard(self, cycles: str):
         self._plugboard = Permutation(cycles, self._alphabet)
 
-    def current_setting(self):
+    def get_current_setting(self):
         machine_setting = ""
         for i in range(1, self._num_rotors):
             machine_setting += self._alphabet.toChar(self._inserted_rotors[i].setting())
@@ -100,3 +104,4 @@ class Machine:
 
     def get_rotors(self):
         return self._inserted_rotors
+

@@ -5,25 +5,27 @@ class FixedRotor(Rotor):
     def __init__(self, name, perm):
         super().__init__(name, perm)
 
-    def set(self, posn):
-        if posn >= len(super().alphabet_string()):
+    def set(self, c_posn: str):
+        i_posn = super().char2int(c_posn)
+        if i_posn >= len(super().alphabet_string()):
             raise Exception("The setting is out of the range!")
         else:
-            super()._iPos = posn
-            super()._cPos = super().int2char(posn)
+            self._cPos = c_posn
+            self._iPos = i_posn
 
     def convertForward(self, p):
-        p += super()._iPos
+        p += self._iPos
         p = super().warp(p)
         image = super().permute(p)
-        image -= super()._iPos
+        image -= self._iPos
         image = super().warp(image)
         return image
 
     def convertBackward(self, e):
-        e += super()._iPos
+        e += self._iPos
         e = super().warp(e)
-        preimage = super().permute(e)
+        preimage = super().invert(e)
+        preimage -= self._iPos
         preimage = super().warp(preimage)
         return preimage
 

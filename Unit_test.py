@@ -62,6 +62,13 @@ class MyTestCase(unittest.TestCase):
         str = "abc\n"
         print(len(str))
 
+    def test_str2int(self):
+        str = '1'
+        print(int(str))
+
+    def test_list(self):
+        list = [1, 2]
+        print(list[0:2])
 
 if __name__ == '__main__':
     unittest.main()

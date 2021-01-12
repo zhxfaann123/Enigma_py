@@ -32,6 +32,7 @@ class Permutation:
                         cyclech += ch
 
         string_reader.close()
+        self.cycles2perm(self._cycles)
         self.cast_perm_char2int()
 
     def cycles2perm(self, cycles):
@@ -51,7 +52,7 @@ class Permutation:
     def cast_perm_char2int(self):
         for char in self._char_perm:
             idx = self._char_perm.index(char)
-            self._int_perm[idx] = self._alphabet.toInt(idx)
+            self._int_perm[idx] = self._alphabet.toInt(char)
 
     def permute(self, input):
         if isinstance(input, int):

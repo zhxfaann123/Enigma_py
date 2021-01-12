@@ -13,15 +13,15 @@ class Rotor:
         return self._name
 
     @staticmethod
-    def rotates(self):
+    def rotates():
         return False
 
     @staticmethod
-    def reflecting(self):
+    def reflecting():
         return False
 
     @staticmethod
-    def setting(self):
+    def setting():
         return 0
 
     def set(self, cposn):
@@ -43,7 +43,7 @@ class Rotor:
         return preimage
 
     @staticmethod
-    def atNotch(self):
+    def atNotch():
         return False
 
     def int2char(self, x):
