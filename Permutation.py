@@ -7,7 +7,7 @@ class Permutation:
     def __init__(self, cycles, alphabet: Alphabet):
         self._alphabet = alphabet
         self._cycles = []
-        self._char_perm = list(Default_Alphabet_String)
+        self._char_perm = list(alphabet.alphabetString)
         self._int_perm = [i for i in range(self._alphabet.size())]
 
         string_reader = StringIO(cycles)
@@ -59,14 +59,14 @@ class Permutation:
             return self._int_perm[input]
         if isinstance(input, str):
             idx_alpha = self._alphabet.toInt(input)
-            return self._char_perm(idx_alpha)
+            return self._char_perm[idx_alpha]
 
     def invert(self, input):
         if isinstance(input, int):
             return self._int_perm.index(input)
         if isinstance(input, str):
             idx_alpha = self._alphabet.toInt(input)
-            return self._int_perm.index(idx_alpha)
+            return self._alphabet.toChar(self.invert(idx_alpha))
 
     def size(self):
         return self._alphabet.size()
